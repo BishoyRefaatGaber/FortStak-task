@@ -13,7 +13,7 @@ spec:
         type: nodejs-pod
     spec:
       containers:
-      - image: akscr2.azurecr.io/helloeyego:v3
+      - image: akscr2.azurecr.io/helloeyego:v1
         name: nodejs-cont
         ports:
         - containerPort: 3000
