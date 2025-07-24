@@ -1,13 +1,13 @@
 name: deploy express nodejs to AKS
-on:
-  push:
-    branches:
-    - main
-    paths:
-    - "app/**"
-
 # on:
-#   workflow_dispatch:
+#   push:
+#     branches:
+#     - main
+#     paths:
+#     - "app/**"
+
+on:
+  workflow_dispatch:
 
 jobs:
   deployment:
