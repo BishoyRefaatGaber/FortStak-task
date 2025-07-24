@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-dep
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: nodejs-pod
+  template:
+    metadata:
+      labels:
+        type: nodejs-pod
+    spec:
+      containers:
+      - image: akscr2.azurecr.io/helloeyego:v3
+        name: nodejs-cont
+        ports:
+        - containerPort: 3000
+          name: nodejs-port
+          protocol: TCP        

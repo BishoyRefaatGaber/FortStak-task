@@ -1,0 +1,80 @@
+name: deploy express nodejs to AKS
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - "app/**"
+
+# on:
+#   workflow_dispatch:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: checkout the repo
+        uses: actions/checkout@v4.2.2
+    
+      - name: get the build number
+        id: get_version
+        run: |
+          version=$(cat current_version.txt)
+          next_version=$((version + 1))
+          echo "$next_version" > current_version.txt
+          echo "image_version=$next_version" >> $GITHUB_OUTPUT  
+     
+      - name: check the version
+        run: echo "the new version is ${{ steps.get_version.outputs.image_version }}" 
+
+
+      - name: update the version in the deployment file
+        run:  sed -i 's/:v[0-9][0-9]*/:v${{ steps.get_version.outputs.image_version }}/g' nodejs-dep.yaml         
+
+      - name: Commit and push updated version
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add current_version.txt nodejs-dep.yaml 
+          git commit -m "CI: update version to ${{ steps.get_version.outputs.image_version }}" || echo "No changes to commit"
+          git push
+
+      - name: Login to Azure
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: login to azure registry
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.LOGIN_SERVER }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+
+
+      - name: build the image and push it
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.LOGIN_SERVER }}/helloeyego:v${{ steps.get_version.outputs.image_version }}
+ 
+      - name: set account subscribtion
+        run: az account set --subscription c2059966-8ddd-44a8-9ec2-89ab2630a8ba
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --name ${{ secrets.CLUSTER_NAME }} \
+            --overwrite-existing
+
+
+      - name: apply the new image on AKS
+        uses: Azure/k8s-deploy@v4.9
+        with:
+          manifests: |
+            nodejs-dep.yaml
+            nodejs-svc.yaml
+            nodejs-ing.yaml
