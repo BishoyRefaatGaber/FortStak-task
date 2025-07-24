@@ -1,4 +1,4 @@
-name: deploy express nodejs to AKS
+name: deploy express nodejs
 # on:
 #   push:
 #     branches:
