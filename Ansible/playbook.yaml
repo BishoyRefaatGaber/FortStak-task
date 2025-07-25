@@ -1,0 +1,14 @@
+- name: Create a user
+  hosts: KubernatesNode
+  become: yes
+  vars_files:
+  - secrets.yaml
+  roles:
+  - install_docker
+  - install_kind
+  - create_kind_cluster
+
+
+
+# ansible_user:
+# ansible_become_pass:
