@@ -13,9 +13,9 @@ spec:
         type: nodejs-pod
     spec:
       containers:
-      - image: akscr2.azurecr.io/helloeyego:v1
+      - image: bishoyrefaatgaber/fortstak-task:v1
         name: nodejs-cont
         ports:
-        - containerPort: 3000
+        - containerPort: 4000
           name: nodejs-port
           protocol: TCP        

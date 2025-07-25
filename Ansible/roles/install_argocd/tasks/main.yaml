@@ -1,0 +1,40 @@
+# curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+- name: install git
+  yum:
+    name: git
+    state: present
+
+- name: install helm
+  become: no
+  get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /tmp/get_helm.sh
+    mode: '0755'
+
+- name: Run Helm install script
+  become: no
+  shell: /tmp/get_helm.sh
+
+
+- name: add argo repo to helm
+  become: no
+  shell: helm repo add argo https://argoproj.github.io/argo-helm
+
+- name: create namespace for argo cd
+  become: no
+  shell: /usr/local/bin/kubectl create namespace argocd  
+
+- name: install argocd
+  become: no
+  shell: helm install argocd -n argocd argo/argo-cd
+  register: argo_output
+
+- name: print argo output
+  debug:
+    var: argo_output.stdout_lines
+
+
+- name: forawrd
+  become: no
+  shell: kubectl port-forward service/argocd-server -n argocd 8080:443 --address="0.0.0.0" &

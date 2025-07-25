@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: nodjs-ing
 spec:
-  ingressClassName: webapprouting.kubernetes.azure.com
+  ingressClassName: nginx
   rules:
-  - host: www.helloeyego.com
+  - host: www.fortstak-task.com
     http:
       paths:
       - path: /
@@ -14,4 +14,4 @@ spec:
           service:
             name: nodejs-svc
             port:
-              number: 3000
+              number: 4000

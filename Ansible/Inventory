@@ -1,2 +1,2 @@
 [KubernatesNode]
-192.168.122.144
+192.168.122.144 ansible_user=coco

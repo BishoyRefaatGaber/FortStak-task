@@ -1,0 +1,25 @@
+
+- name: delete old cluster
+  shell: /usr/local/bin/kind delete cluster
+
+- name: Create Kind cluster configuration file
+  template:
+    src: kind-config.yaml
+    dest: /tmp/kind-config.yaml
+    mode: 0644
+
+- name: create kind cluster
+  become: no
+  shell: "/usr/local/bin/kind create cluster --config /tmp/kind-config.yaml"
+
+- name: apply nginx ingress controller 
+  become: no
+  shell: "/usr/local/bin/kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml"
+
+- name: wait until condition met
+  become: no
+  shell: |
+    /usr/local/bin/kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=100s

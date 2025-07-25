@@ -1,0 +1,16 @@
+# curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+- name: download kubectl binaries
+  shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+
+
+# chmod +x kubectl
+
+- name: make binaries executable
+  shell: chmod +x kubectl
+
+# mv ./kubectl ~/.local/bin/kubectl
+
+- name: move binaries executable
+  shell:  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
