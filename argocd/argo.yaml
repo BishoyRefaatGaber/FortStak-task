@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/BishoyRefaatGaber/FortStak-task.git
+    repoURL: 'https://github.com/BishoyRefaatGaber/FortStak-task.git'
     path: k8s
     targetRevision: main    
   destination:
