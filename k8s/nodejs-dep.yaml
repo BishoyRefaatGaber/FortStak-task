@@ -9,6 +9,7 @@ spec:
       type: nodejs-pod
   template:
     metadata:
+      name: nodejs-pod
       labels:
         type: nodejs-pod
     spec:
