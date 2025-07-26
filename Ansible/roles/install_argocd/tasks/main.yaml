@@ -34,7 +34,3 @@
   debug:
     var: argo_output.stdout_lines
 
-
-- name: forawrd
-  become: no
-  shell: kubectl port-forward service/argocd-server -n argocd 8080:443 --address="0.0.0.0" &
