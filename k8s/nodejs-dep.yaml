@@ -14,7 +14,7 @@ spec:
         type: nodejs-pod
     spec:
       containers:
-      - image: bishoyrefaatgaber/fortstak-task:v11
+      - image: bishoyrefaatgaber/fortstak-task:v12
         name: nodejs-cont
         ports:
         - containerPort: 4000
