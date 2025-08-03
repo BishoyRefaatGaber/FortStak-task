@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
       - image: bishoyrefaatgaber/fortstak-task:v9
+
         name: nodejs-cont
         ports:
         - containerPort: 4000
